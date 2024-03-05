@@ -7,6 +7,7 @@ import mapboxgl from "mapbox-gl"
 
 const map = ref(null)
 let mapGl = ref(null)
+const mapMarkerInstances = new Set()
 const markers = new Set()
 
 const { a } = useActiveStore()
@@ -72,9 +73,12 @@ onMounted(() => {
 watch(active, () => {
     if(!Object.prototype.hasOwnProperty.call(active.value, 'name')) {
         markers.clear()
+        mapMarkerInstances.forEach(item => item.remove())
+        mapMarkerInstances.clear()
+        return
     }
 
-    new mapboxgl.Marker({
+    const marker = new mapboxgl.Marker({
         element: createMarker()
     })
     .setLngLat(active.value.latlong)
@@ -87,6 +91,10 @@ watch(active, () => {
     )
     .addTo(mapGl.value)
     .togglePopup()
+
+    if(!mapMarkerInstances.has(marker)) {
+        mapMarkerInstances.add(marker)
+    }
 
     mapGl.value.flyTo({
         center: [...active.value.latlong],
@@ -103,7 +111,7 @@ watch(active, () => {
 watch(residencies, () => {
     residencies.value.forEach(item => {
         if(!markers.has(item.latlong)) {
-            new mapboxgl.Marker({
+            const marker = new mapboxgl.Marker({
                 element: createResidencyMarker()
             })
             .setLngLat(item.latlong)
@@ -118,6 +126,10 @@ watch(residencies, () => {
             )
             .addTo(mapGl.value)
             .togglePopup()
+            
+            if(!mapMarkerInstances.has(marker)) {
+                mapMarkerInstances.add(marker)
+            }
 
             markers.add(item.latlong)
         }
@@ -138,7 +150,7 @@ watch(residencies, () => {
 watch(revenue_generators, () => {
     revenue_generators.value.forEach(item => {
         if(!markers.has(item.latlong)) {
-            new mapboxgl.Marker({
+            const marker = new mapboxgl.Marker({
                 element: createRevyMarker()
             })
             .setLngLat(item.latlong)
@@ -152,6 +164,10 @@ watch(revenue_generators, () => {
             )
             .addTo(mapGl.value)
             .togglePopup()
+
+            if(!mapMarkerInstances.has(marker)) {
+                mapMarkerInstances.add(marker)
+            }
 
             markers.add(item.latlong)
         }
@@ -172,7 +188,7 @@ watch(revenue_generators, () => {
 watch(business_locations, () => {
     business_locations.value.forEach(item => {
         if(!markers.has(item.latlong)) {
-            new mapboxgl.Marker({
+            const marker = new mapboxgl.Marker({
                 element: createBusinessLocationMarker()
             })
             .setLngLat(item.latlong)
@@ -186,6 +202,10 @@ watch(business_locations, () => {
             )
             .addTo(mapGl.value)
             .togglePopup()
+
+            if(!mapMarkerInstances.has(marker)) {
+                mapMarkerInstances.add(marker)
+            }
 
             markers.add(item.latlong)
         }
