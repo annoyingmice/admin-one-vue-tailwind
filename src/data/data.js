@@ -29,10 +29,12 @@ export default [
             },
             {
                 name: "Private Jet Company Inc.",
+                location: "Dubai, UAE - Manager",
                 latlong: [33.9744003,-83.9679207],
             },
             {
                 name: "Financial Marketing Firm",
+                location: "Labuan, Malaysia- CEO",
                 latlong: [34.0173108,-84.0782773],
             },
         ],

@@ -7,13 +7,14 @@ import mapboxgl from "mapbox-gl"
 
 const map = ref(null)
 let mapGl = ref(null)
+let focusedMarker = ref(null)
 const mapMarkerInstances = new Set()
 const markers = new Set()
 
 const { a } = useActiveStore()
 const active = computed(() => a.selected)
 const residencies = computed(() => a.residencies)
-// const revenue_generators = computed(() => a.revenue_generators)
+const focus_location = computed(() => a.focus_location)
 const business_locations = computed(() => a.business_locations)
 
 const createMarker = () => {
@@ -38,16 +39,16 @@ const createResidencyMarker = () => {
     return marker
 }
 
-// const createRevyMarker = () => {
-//     const marker = document.createElement('div')
-//     marker.innerHTML = `
-//         <span class="relative flex h-3 w-3 cursor">
-//             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-200 opacity-75"></span>
-//             <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-300"></span>
-//         </span>
-//     `
-//     return marker
-// }
+const createRevyMarker = () => {
+    const marker = document.createElement('div')
+    marker.innerHTML = `
+        <span class="relative flex h-3 w-3 cursor">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-200 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-300"></span>
+        </span>
+    `
+    return marker
+}
 
 const createBusinessLocationMarker = () => {
     const marker = document.createElement('div')
@@ -145,6 +146,60 @@ watch(residencies, () => {
             }
         })
     })
+})
+
+watch(focus_location, () => {
+    if(focus_location.value.length > 0 && !markers.has(focus_location.value)) {
+        focusedMarker.value = new mapboxgl.Marker({
+                element: createRevyMarker()
+            })
+            .setLngLat(focus_location.value)
+            // .setPopup(
+            //     new mapboxgl.Popup({ closeButton: false, offset: 25 })
+            //         .setHTML(`
+            //             <div>
+            //                 <span class="block">${item.name}</span>
+            //             </div>
+            //         `)
+            // )
+            .addTo(mapGl.value)
+            // .togglePopup()
+
+            if(!mapMarkerInstances.has(focusedMarker.value)) {
+                mapMarkerInstances.add(focusedMarker.value)
+            }
+
+            markers.add(focus_location.value)
+    }
+
+    if(markers.has(focus_location.value) && focus_location.value.length > 0) {
+        mapGl.value.flyTo({
+            center: [...focus_location.value],
+            essential: true,
+            zoom: 10,
+            speed: 1.5,
+            curve: 1.4,
+            easing(t) {
+                return t;
+            }
+        })
+    }
+
+    if(focus_location.value.length === 0) {
+        mapGl.value.flyTo({
+            center: [...active.value.latlong],
+            essential: true,
+            zoom: 2,
+            speed: 1.5,
+            curve: 1.4,
+            easing(t) {
+                return t;
+            }
+        })
+
+        markers.delete(focus_location.value)
+        focusedMarker.value.remove()
+    }
 })
 
 // watch(revenue_generators, () => {

@@ -44,7 +44,10 @@ const handleClickSearchResult = (e) => {
 }
 const handleClickRemoveResult = (e) => results.value = results.value.filter(item => item.id !== e)
 const handleResidency = () => setResidency(active.value.residencies.map(item => item))
-const handleRevG = () => openRevGeneratorInfo.value = !openRevGeneratorInfo.value //setRevenue(active.value.revenue_generators.map(item => item))
+const handleRevG = () => {
+  setRevenue(active.value.revenue_generators.map(item => item))
+  openRevGeneratorInfo.value = !openRevGeneratorInfo.value
+}
 const handleBusinessLocation = () => setBusinessLocation(active.value.business_locations.map(item => item))
 const handleCorporateStructure = () => {
   setActiveContent(active.value.corporate_structures)
