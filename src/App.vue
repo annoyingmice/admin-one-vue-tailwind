@@ -6,6 +6,7 @@ import SearchInput from "@/components/SearchInput.vue"
 import SearchCard from "@/components/SearchCard.vue"
 import CorporateView from "@/components/CorporateView.vue"
 import OtherView from "@/components/OtherView.vue"
+import RevGeneratorView from "@/components/RevGeneratorView.vue"
 import { computed, ref } from "vue"
 
 import { useMainStore } from "@/stores"
@@ -19,6 +20,7 @@ const timeoudId = ref(0)
 let results = ref([])
 const openCorpInfo = ref(false)
 const openOtherInfo = ref(false)
+const openRevGeneratorInfo = ref(false)
 
 const handleSearch = (e) => {
   if(timeoudId.value) clearTimeout(timeoudId.value)
@@ -42,7 +44,7 @@ const handleClickSearchResult = (e) => {
 }
 const handleClickRemoveResult = (e) => results.value = results.value.filter(item => item.id !== e)
 const handleResidency = () => setResidency(active.value.residencies.map(item => item))
-const handleRevG = () => setRevenue(active.value.revenue_generators.map(item => item))
+const handleRevG = () => openRevGeneratorInfo.value = !openRevGeneratorInfo.value //setRevenue(active.value.revenue_generators.map(item => item))
 const handleBusinessLocation = () => setBusinessLocation(active.value.business_locations.map(item => item))
 const handleCorporateStructure = () => {
   setActiveContent(active.value.corporate_structures)
@@ -61,6 +63,7 @@ const handleClear = () => {
   setActive({})
   openCorpInfo.value = false
   openOtherInfo.value = false
+  openRevGeneratorInfo.value = false
 }
 </script>
 
@@ -128,6 +131,7 @@ const handleClear = () => {
 
       <CorporateView v-if="openCorpInfo" />
       <OtherView v-if="openOtherInfo" />
+      <RevGeneratorView v-if="openRevGeneratorInfo" />
     </div>
 
     <MapView />

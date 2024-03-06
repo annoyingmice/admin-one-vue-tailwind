@@ -13,7 +13,7 @@ const markers = new Set()
 const { a } = useActiveStore()
 const active = computed(() => a.selected)
 const residencies = computed(() => a.residencies)
-const revenue_generators = computed(() => a.revenue_generators)
+// const revenue_generators = computed(() => a.revenue_generators)
 const business_locations = computed(() => a.business_locations)
 
 const createMarker = () => {
@@ -38,16 +38,16 @@ const createResidencyMarker = () => {
     return marker
 }
 
-const createRevyMarker = () => {
-    const marker = document.createElement('div')
-    marker.innerHTML = `
-        <span class="relative flex h-3 w-3 cursor">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-200 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-300"></span>
-        </span>
-    `
-    return marker
-}
+// const createRevyMarker = () => {
+//     const marker = document.createElement('div')
+//     marker.innerHTML = `
+//         <span class="relative flex h-3 w-3 cursor">
+//             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-200 opacity-75"></span>
+//             <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-300"></span>
+//         </span>
+//     `
+//     return marker
+// }
 
 const createBusinessLocationMarker = () => {
     const marker = document.createElement('div')
@@ -147,43 +147,43 @@ watch(residencies, () => {
     })
 })
 
-watch(revenue_generators, () => {
-    revenue_generators.value.forEach(item => {
-        if(!markers.has(item.latlong)) {
-            const marker = new mapboxgl.Marker({
-                element: createRevyMarker()
-            })
-            .setLngLat(item.latlong)
-            .setPopup(
-                new mapboxgl.Popup({ closeButton: false, offset: 25 })
-                    .setHTML(`
-                        <div>
-                            <span class="block">${item.name}</span>
-                        </div>
-                    `)
-            )
-            .addTo(mapGl.value)
-            .togglePopup()
+// watch(revenue_generators, () => {
+//     revenue_generators.value.forEach(item => {
+//         if(!markers.has(item.latlong)) {
+//             const marker = new mapboxgl.Marker({
+//                 element: createRevyMarker()
+//             })
+//             .setLngLat(item.latlong)
+//             .setPopup(
+//                 new mapboxgl.Popup({ closeButton: false, offset: 25 })
+//                     .setHTML(`
+//                         <div>
+//                             <span class="block">${item.name}</span>
+//                         </div>
+//                     `)
+//             )
+//             .addTo(mapGl.value)
+//             .togglePopup()
 
-            if(!mapMarkerInstances.has(marker)) {
-                mapMarkerInstances.add(marker)
-            }
+//             if(!mapMarkerInstances.has(marker)) {
+//                 mapMarkerInstances.add(marker)
+//             }
 
-            markers.add(item.latlong)
-        }
+//             markers.add(item.latlong)
+//         }
 
-        mapGl.value.flyTo({
-            center: [...item.latlong],
-            essential: true,
-            // zoom: 10,
-            speed: 1.5,
-            curve: 1.4,
-            easing(t) {
-            return t;
-            }
-        })
-    })
-})
+//         mapGl.value.flyTo({
+//             center: [...item.latlong],
+//             essential: true,
+//             // zoom: 10,
+//             speed: 1.5,
+//             curve: 1.4,
+//             easing(t) {
+//             return t;
+//             }
+//         })
+//     })
+// })
 
 watch(business_locations, () => {
     business_locations.value.forEach(item => {
@@ -197,6 +197,7 @@ watch(business_locations, () => {
                     .setHTML(`
                         <div>
                             <span class="block">${item.name}</span>
+                            <span>${item.location}</span>
                         </div>
                     `)
             )

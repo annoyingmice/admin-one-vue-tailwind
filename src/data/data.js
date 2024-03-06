@@ -1,7 +1,7 @@
 export default [
     {
         id: 1,
-        name: "Juan Dela Cruz",
+        name: "John Doe",
         networth: "$50,000,000",
         latlong: [144.946457, -37.840935],
         residencies: [
@@ -24,6 +24,7 @@ export default [
         revenue_generators: [
             {
                 name: "Advisory Firm, LLC",
+                location: "Delaware, United States of America - Chairman",
                 latlong: [34.0895221,-84.2733485],
             },
             {
@@ -37,15 +38,18 @@ export default [
         ],
         business_locations: [
             {
-                name: "Delaware, United States of America - Chairman",
+                name: "Advisory Firm, LLC",
+                location: "Delaware, United States of America - Chairman",
                 latlong: [-76.0459692,39.1434664],
             },
             {
                 name: "Dubai, UAE - Manager",
+                location: "Private Jet Company Inc.",
                 latlong: [54.603616,25.0747186],
             },
             {
-                name: "Labuan, Malaysia- CEO",
+                name: "Financial Marketing Firm",
+                location: "Labuan, Malaysia- CEO",
                 latlong: [115.1408031,5.3027478],
             },
         ],
